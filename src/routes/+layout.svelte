@@ -4,4 +4,7 @@
 </script>
 
 <ModeWatcher />
-<slot />
+
+<div class="flex h-screen w-full flex-col justify-center antialiased">
+	<slot />
+</div>
