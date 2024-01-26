@@ -6,16 +6,19 @@
 	import { slide } from "svelte/transition"
 	import { enhance } from "$app/forms"
 	import { Clipboard } from "lucide-svelte"
+	import { Label } from "$lib/components/ui/label"
 
 	let longUrl: string
-	let shortUrl: string
+
+	export let form
 
 	const copyToClipboard = async () => {
-		await navigator.clipboard.writeText(shortUrl)
-		setTimeout(() => {
-			// click on the close button to close the popover (data-melt-popover-close tag)
-			document.querySelector<HTMLElement>("[data-melt-popover-close]")!.click()
-		}, 1500)
+		if (form?.url) {
+			await navigator.clipboard.writeText(form?.url)
+			setTimeout(() => {
+				document.querySelector<HTMLElement>("[data-melt-popover-close]")!.click()
+			}, 1500)
+		}
 	}
 </script>
 
@@ -27,26 +30,31 @@
 			</Card.Header>
 			<Card.Content class="">
 				<form use:enhance method="post" class="flex flex-col gap-4 py-4 pt-4">
-					<Input
-						bind:value={longUrl}
-						type="url"
-						name="url"
-						placeholder="Enter your long URL here"
-					/>
-					<Button disabled={!longUrl} type="submit" class="w-full">Shorten</Button>
+					<Label for="url">
+						<Input
+							bind:value={longUrl}
+							id="url"
+							name="url"
+							placeholder="Enter your long URL here"
+						/>
+						{#if form?.missing?.url || form?.invalid?.url}
+							<p transition:slide class="text-sm text-red-500">Please enter a valid URL</p>
+						{/if}
+					</Label>
+					<Button type="submit" class="w-full">Shorten</Button>
 				</form>
 			</Card.Content>
 		</Card.Root>
 	</div>
 
-	{#if shortUrl}
+	{#if form?.success}
 		<div class="w-full max-w-md" transition:slide>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title tag="h2">Your shortened URL:</Card.Title>
 				</Card.Header>
 				<Card.Content class="flex gap-2">
-					<Input readonly bind:value={shortUrl} />
+					<Input readonly value={form?.url} />
 					<Popover.Root>
 						<Popover.Trigger>
 							<Button on:click={copyToClipboard} variant="outline" size="icon">
