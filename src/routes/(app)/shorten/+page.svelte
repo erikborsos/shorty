@@ -42,6 +42,9 @@
 						{/if}
 					</Label>
 					<Button type="submit" class="w-full">Shorten</Button>
+					{#if form?.error}
+						<p transition:slide class="text-sm text-red-500">{form?.error}</p>
+					{/if}
 				</form>
 			</Card.Content>
 		</Card.Root>

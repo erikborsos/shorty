@@ -1,4 +1,6 @@
 import { type RequestHandler } from "@sveltejs/kit"
+import { createUrl, getUrl } from "$lib/db/db"
+import { generateShortUrl } from "$lib/url/url"
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
@@ -18,8 +20,32 @@ export const POST: RequestHandler = async ({ request }) => {
 			})
 		}
 
-		return new Response(JSON.stringify({ success: true, url: url }))
-	} catch (error) {
+		try {
+			const shortUrl = generateShortUrl()
+
+			const dbUrl = await getUrl(shortUrl)
+			if (dbUrl) {
+				return new Response(JSON.stringify({ error: "Shortened URL already exists" }), {
+					status: 400,
+					headers: { "Content-Type": "application/json" }
+				})
+			}
+
+			await createUrl(shortUrl, url)
+			return new Response(JSON.stringify({ success: true, url: shortUrl }), {
+				status: 200,
+				headers: { "Content-Type": "application/json" }
+			})
+		} catch (_) {
+			return new Response(
+				JSON.stringify({ error: "Couldn't establish connection to the database" }),
+				{
+					status: 500,
+					headers: { "Content-Type": "application/json" }
+				}
+			)
+		}
+	} catch (_) {
 		return new Response(JSON.stringify({ error: "Invalid JSON input" }), {
 			status: 400
 		})
