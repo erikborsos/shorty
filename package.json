@@ -14,7 +14,7 @@
 		"test:unit": "vitest",
 		"prepare": "husky",
 		"prisma:generate": "prisma generate",
-		"prisma:migrate": "pprisma migrate deploy",
+		"prisma:migrate": "prisma migrate deploy",
 		"build": "bun run prisma:migrate && bun run prisma:generate && vite build"
 	},
 	"devDependencies": {
