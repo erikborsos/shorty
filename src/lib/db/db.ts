@@ -1,11 +1,10 @@
 import { PrismaClient } from "@prisma/client"
-
 const prisma = new PrismaClient()
 
 export const createUrl = async (shortUrl: string, longUrl: string) => {
 	return prisma.url.create({
 		data: {
-			shortUrl: shortUrl,
+			id: shortUrl,
 			longUrl: longUrl
 		}
 	})
@@ -14,7 +13,7 @@ export const createUrl = async (shortUrl: string, longUrl: string) => {
 export const getUrl = async (shortUrl: string) => {
 	return prisma.url.findUnique({
 		where: {
-			shortUrl: shortUrl
+			id: shortUrl
 		}
 	})
 }

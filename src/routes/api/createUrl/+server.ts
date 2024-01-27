@@ -1,16 +1,19 @@
 import { type RequestHandler } from "@sveltejs/kit"
 import { createUrl, getUrl } from "$lib/db/db"
 import { generateShortUrl } from "$lib/url/url"
+import { BASE_URL } from "$env/static/private"
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
-		const { url } = await request.json()
+		let { url } = await request.json()
 
 		if (!url) {
 			return new Response(JSON.stringify({ missing: { url: true } }), {
 				status: 400
 			})
 		}
+
+		if (!url.startsWith("http")) url = "https://" + url
 
 		const urlPattern = /^(?:(?:https?:\/\/)?(?:[a-z0-9-]+\.)+[a-z0-9]+)?(?:\/\S*)?$/i
 
@@ -32,7 +35,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			}
 
 			await createUrl(shortUrl, url)
-			return new Response(JSON.stringify({ success: true, url: shortUrl }), {
+			return new Response(JSON.stringify({ success: true, url: BASE_URL + "/s/" + shortUrl }), {
 				status: 200,
 				headers: { "Content-Type": "application/json" }
 			})

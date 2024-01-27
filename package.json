@@ -14,8 +14,8 @@
 		"test:unit": "vitest",
 		"prepare": "husky",
 		"prisma:generate": "prisma generate",
-		"prisma:push": "prisma db push",
-		"build": "bun run prisma:push && bun run prisma:generate && vite build"
+		"prisma:migrate": "pprisma migrate deploy",
+		"build": "bun run prisma:migrate && bun run prisma:generate && vite build"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
