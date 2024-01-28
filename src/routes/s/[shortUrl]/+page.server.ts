@@ -5,7 +5,6 @@ import { redirect } from "@sveltejs/kit"
 export const load = (async ({ params }) => {
 	const url = await getUrl(params.shortUrl)
 	if (url) {
-		redirect(302, url.longUrl)
+		return redirect(302, url.longUrl)
 	}
-	return {}
 }) satisfies PageServerLoad

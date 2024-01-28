@@ -12,7 +12,7 @@
 
 <div class="h-screen w-full flex-col antialiased">
 	<div class=" flex h-screen w-full flex-1 flex-col items-center justify-center gap-4">
-		{#if data.url !== "/"}
+		{#if data.url !== "/" && !data.url.startsWith("/s/")}
 			<div
 				transition:slide={{ duration: 100, easing: cubicInOut }}
 				class="absolute top-0 flex w-screen items-center justify-between border-b px-6 py-4"
