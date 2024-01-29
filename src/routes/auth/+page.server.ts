@@ -1,19 +1,72 @@
-import { type Actions, fail } from "@sveltejs/kit"
+import { type ActionFailure, type Actions, fail, redirect } from "@sveltejs/kit"
 import bcrypt from "bcrypt"
-import { createUser, emailExists, usernameExists } from "$lib/user/user"
+import jwt from "jsonwebtoken"
+import { createUser, emailExists, getUserByEmail, usernameExists } from "$lib/user/user"
+import { JWT_TOKEN } from "$env/static/private"
+
+type Missing = {
+	email?: boolean
+	username?: boolean
+	password?: boolean
+	passwordConfirm?: boolean
+}
+
+type Invalid = {
+	email?: "syntax" | "exists"
+	username?: "syntax" | "exists"
+	password?: "length" | "syntax"
+	passwordConfirm?: boolean
+}
+
+type FormResponse = {
+	missing?: Missing
+	invalid?: Invalid
+	error?: string
+	success?: boolean
+}
+
+type Response = FormResponse | ActionFailure<FormResponse>
 
 export const actions = {
-	register: async ({ fetch, request }) => {
+	login: async ({ fetch, request, cookies }): Promise<Response> => {
+		const { email, password } = Object.fromEntries(await request.formData()) as Record<
+			string,
+			string
+		>
+
+		const missing: Missing = {}
+		if (!email) {
+			missing.email = true
+		}
+		if (!password) {
+			missing.password = true
+		}
+		if (Object.keys(missing).length > 0) {
+			return fail(400, { missing })
+		}
+
+		const user = await getUserByEmail(email)
+
+		if (!user || !(await bcrypt.compare(password, user.password))) {
+			return fail(400, { error: "Invalid email or password" })
+		}
+
+		const token = jwt.sign({ id: user.id }, JWT_TOKEN, { expiresIn: "7d", algorithm: "HS256" })
+		cookies.set("Authorisation", `Bearer ${token}`, {
+			path: "/",
+			sameSite: "strict",
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			maxAge: 7 * 24 * 60 * 1000
+		})
+		throw redirect(302, "/")
+	},
+	register: async ({ fetch, request }): Promise<Response> => {
 		const { email, username, password, passwordConfirm } = Object.fromEntries(
 			await request.formData()
 		) as Record<string, string>
 
-		const missing: {
-			email?: boolean
-			username?: boolean
-			password?: boolean
-			passwordConfirm?: boolean
-		} = {}
+		const missing: Missing = {}
 
 		if (!username) {
 			missing.username = true
@@ -31,12 +84,7 @@ export const actions = {
 			return fail(400, { missing })
 		}
 
-		const invalid: {
-			email?: "syntax" | "exists"
-			username?: "syntax" | "exists"
-			password?: "length" | "syntax"
-			passwordConfirm?: boolean
-		} = {}
+		const invalid: Invalid = {}
 		const emailPattern = /^.+@.+\..+$/
 		if (!emailPattern.test(email)) {
 			invalid.email = "syntax"

@@ -17,18 +17,24 @@
 				<Card.Title class="text-center text-3xl" tag="h2">Login</Card.Title>
 			</Card.Header>
 			<Card.Content>
-				<form use:enhance method="post" class="flex flex-col gap-4 py-4 pt-4">
+				<form use:enhance method="post" action="?/login" class="flex flex-col gap-4 py-4 pt-4">
 					<Label class="space-y-1">
 						<span>Email</span>
 						<InputIcon placeholder="Enter your email" name="email" type="email">
 							<Mail />
 						</InputIcon>
+						{#if form?.missing?.email}
+							<p transition:slide class="text-sm text-red-500">Please provide your email</p>
+						{/if}
 					</Label>
 					<Label class="space-y-1">
 						<span>Password</span>
 						<InputIcon placeholder="Enter your password" name="password" type="password">
 							<KeyRound />
 						</InputIcon>
+						{#if form?.missing?.password}
+							<p transition:slide class="text-sm text-red-500">Please provide your password</p>
+						{/if}
 					</Label>
 					<Button type="submit" class="w-full">Login</Button>
 					{#if form?.error}

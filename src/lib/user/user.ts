@@ -18,6 +18,14 @@ export const getUser = async (id: string) => {
 	})
 }
 
+export const getUserByEmail = async (email: string) => {
+	return prisma.user.findUnique({
+		where: {
+			email: email
+		}
+	})
+}
+
 export const emailExists = async (email: string): Promise<boolean> => {
 	const user = await prisma.user.count({
 		where: {
