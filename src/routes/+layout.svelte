@@ -6,8 +6,11 @@
 	import { User } from "lucide-svelte"
 	import ToggleButton from "$lib/components/ToggleButton.svelte"
 	import { Button } from "$lib/components/ui/button/"
+	import type { PageData } from "./$types"
 
-	export let data
+	export let data: PageData
+
+	$: userHref = data.user ? "/profile" : "/auth"
 </script>
 
 <ModeWatcher />
@@ -22,7 +25,7 @@
 				<h1 class="text-2xl font-bold">Shorty</h1>
 			</a>
 			<nav class="flex items-center justify-center gap-4">
-				<Button variant="outline" size="icon" href="/auth">
+				<Button variant="outline" size="icon" href={userHref}>
 					<User />
 				</Button>
 				<ToggleButton />

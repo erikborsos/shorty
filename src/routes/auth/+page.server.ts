@@ -2,7 +2,7 @@ import { type ActionFailure, type Actions, fail, redirect } from "@sveltejs/kit"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { createUser, emailExists, getUserByEmail, usernameExists } from "$lib/user/user"
-import { JWT_TOKEN } from "$env/static/private"
+import { JWT_SECRET } from "$env/static/private"
 
 type Missing = {
 	email?: boolean
@@ -51,7 +51,7 @@ export const actions = {
 			return fail(400, { error: "Invalid email or password" })
 		}
 
-		const token = jwt.sign({ id: user.id }, JWT_TOKEN, { expiresIn: "7d", algorithm: "HS256" })
+		const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d", algorithm: "HS256" })
 		cookies.set("Authorisation", `Bearer ${token}`, {
 			path: "/",
 			sameSite: "strict",
