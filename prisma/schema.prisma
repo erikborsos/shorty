@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  provider = "cockroachdb"
+  url = env("DATABASE_URL")
 }
 
 model Url {
@@ -14,12 +13,22 @@ model Url {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   visits Visit[]
+  userId String?
 }
 
 model Visit {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
   urlId String
   url Url @relation(fields: [urlId], references: [id])
   dateTime DateTime @default(now())
   country String
+}
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  username String @unique
+  password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

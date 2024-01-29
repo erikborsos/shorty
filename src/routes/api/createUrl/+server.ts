@@ -1,5 +1,5 @@
 import { type RequestHandler } from "@sveltejs/kit"
-import { createUrl, getUrl } from "$lib/db/db"
+import { createUrl, getUrl } from "$lib/url/url"
 import { generateShortUrl } from "$lib/url/url"
 import { BASE_URL } from "$env/static/private"
 
@@ -39,7 +39,8 @@ export const POST: RequestHandler = async ({ request }) => {
 				status: 200,
 				headers: { "Content-Type": "application/json" }
 			})
-		} catch (_) {
+		} catch (e) {
+			console.error(e)
 			return new Response(
 				JSON.stringify({ error: "Couldn't establish connection to the database" }),
 				{
