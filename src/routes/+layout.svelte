@@ -19,7 +19,7 @@
 	{#if data.url !== "/" && !data.url.startsWith("/s/")}
 		<nav
 			transition:slide={{ duration: 100, easing: cubicInOut }}
-			class="row-start-1 flex w-screen items-center justify-between border-b px-6 py-4"
+			class="row-start-1 flex w-screen items-center justify-between border-b bg-background px-6 py-4"
 		>
 			<a href="/">
 				<h1 class="text-2xl font-bold">Shorty</h1>
