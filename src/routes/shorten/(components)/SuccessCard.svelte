@@ -7,7 +7,6 @@
 	import type { ActionData } from "../$types"
 
 	export let form: ActionData
-
 	const copyToClipboard = async () => {
 		if (form?.url) {
 			await navigator.clipboard.writeText(form?.url)
