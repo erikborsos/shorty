@@ -6,7 +6,7 @@ import { createVisit } from "$lib/visit/visit"
 export const load = (async ({ params, getClientAddress }) => {
 	const ipv6 = getClientAddress()
 	if (!isPrivateAddress(ipv6)) {
-		const country = await fetch(`https://ipwho.is/{ipv6}`)
+		const country = await fetch(`https://ipwho.is/${ipv6}`)
 			.then((res) => res.json())
 			.then((res) => res.country)
 		if (country) {
