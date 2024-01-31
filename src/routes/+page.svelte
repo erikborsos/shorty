@@ -14,6 +14,7 @@
 		</div>
 		<div class="w-full max-w-sm space-y-2">
 			<Button href="/shorten">Get Started</Button>
+			<Button href="/urls">URLs</Button>
 		</div>
 	</div>
 </div>

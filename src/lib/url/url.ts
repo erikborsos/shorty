@@ -34,3 +34,11 @@ export const getUrl = async (shortUrl: string) => {
 		}
 	})
 }
+
+export const getUrls = async (userId: string) => {
+	return prisma.url.findMany({
+		where: {
+			userId: userId
+		}
+	})
+}

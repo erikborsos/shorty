@@ -8,3 +8,11 @@ export const createVisit = async (url: string, country: string) => {
 		}
 	})
 }
+
+export const getVisitsCount = async (url: string) => {
+	return prisma.visit.count({
+		where: {
+			urlId: url
+		}
+	})
+}

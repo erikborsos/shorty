@@ -1,33 +1,31 @@
 <script lang="ts">
-	import Skeleton from "$lib/components/ui/skeleton/skeleton.svelte"
 	import { fade } from "svelte/transition"
-	import { Button } from "$lib/components/ui/button"
-	import { Unlink } from "lucide-svelte"
+	import * as Card from "$lib/components/ui/card"
+	import * as Popover from "$lib/components/ui/popover"
+	import Loading from "./(components)/Loading.svelte"
+	import NoUrls from "./(components)/NoUrls.svelte"
+	import Url from "./(components)/Url.svelte"
 
 	export let data
-
-	const skeletons = 8
 </script>
 
-<div class="flex h-full w-full max-w-screen-md flex-col space-y-5 py-10">
+<div class="flex max-h-full min-h-full w-full max-w-screen-md flex-col space-y-5 py-10">
 	<h1 class="text-4xl font-bold">My URLs</h1>
-
 	{#await data.urls}
-		<div class="flex flex-1 space-y-2" out:fade={{ duration: 200 }}>
-			{#each { length: skeletons } as _, i}
-				<Skeleton opacity={(skeletons - i) / skeletons} class="h-20 w-full" />
-			{/each}
-		</div>
+		<Loading />
 	{:then urls}
-		<div class="flex flex-1 space-y-2" in:fade={{ duration: 200, delay: 200 }}>
+		<div
+			class="flex h-full w-full flex-col gap-2 overflow-scroll"
+			in:fade={{ duration: 100, delay: 200 }}
+		>
 			{#if (urls ?? []).length === 0}
-				<div class="flex flex-1 flex-col items-center justify-center gap-2">
-					<Unlink class="h-40 w-40" />
-					<p class="text-gray-500 dark:text-gray-400">You haven't shortened any URLs yet.</p>
-					<Button href="/shorten">Shorten</Button>
-				</div>
+				<NoUrls />
 			{:else}
-				<div></div>
+				<div class="mx-5 flex flex-col gap-2">
+					{#each urls ?? [] as url}
+						<Url {url} bind:data />
+					{/each}
+				</div>
 			{/if}
 		</div>
 	{/await}
