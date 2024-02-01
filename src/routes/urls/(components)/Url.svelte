@@ -14,6 +14,7 @@
 		userId: string | null
 	}
 
+	export let onUrlClick: (e: MouseEvent & { currentTarget: HTMLAnchorElement }) => Promise<void>
 	export let data: PageData
 
 	const getUrl = (id: string) => {
@@ -24,13 +25,9 @@
 		e.preventDefault()
 		copyToClipboard(getUrl(id))
 	}
-
-	const deleteUrl = (e: Event, id: string) => {
-		e.preventDefault()
-	}
 </script>
 
-<a href="##">
+<a href={`/urls/${url.id}`} on:click|preventDefault={onUrlClick}>
 	<Card.Root class="flex items-center justify-between px-4 py-4">
 		<div class="flex flex-col gap-2">
 			<div class="flex items-center gap-2">
@@ -47,12 +44,13 @@
 					</Popover.Root>
 				</Card.Title>
 			</div>
+			<Card.Content class="p-0">Visits: {url.visits}</Card.Content>
 			<Card.Description class="text-xs">
 				Long URL: {url.longUrl}
 			</Card.Description>
 		</div>
 		<div class="flex items-center">
-			<div class="flex flex-col gap-2">
+			<div class="flex flex-col items-end gap-2">
 				<Card.Description class="text-xs">
 					Created At: {getIsoDate(url.createdAt)}
 				</Card.Description>
@@ -60,16 +58,22 @@
 					Updated At: {getIsoDate(url.updatedAt)}
 				</Card.Description>
 			</div>
-			<Button
-				on:click={(e) => {
-					deleteUrl(e, url.id)
-				}}
-				class="ml-2"
-				variant="destructive"
-				size="icon"
-			>
-				<Trash2 />
-			</Button>
+			<form method="post">
+				<input hidden name="id" value={url.id} />
+				<Button
+					type="submit"
+					class="ml-2"
+					variant="destructive"
+					size="icon"
+					on:click={(e) => {
+						if (!confirm("Are you sure you want to delete this URL?")) {
+							e.preventDefault()
+						}
+					}}
+				>
+					<Trash2 />
+				</Button>
+			</form>
 		</div>
 	</Card.Root>
 </a>

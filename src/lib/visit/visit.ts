@@ -16,3 +16,11 @@ export const getVisitsCount = async (url: string) => {
 		}
 	})
 }
+
+export const getVisits = async (url: string) => {
+	return prisma.visit.findMany({
+		where: {
+			urlId: url
+		}
+	})
+}

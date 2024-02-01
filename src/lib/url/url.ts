@@ -42,3 +42,11 @@ export const getUrls = async (userId: string) => {
 		}
 	})
 }
+
+export const deleteUrl = async (shortUrl: string) => {
+	return prisma.url.delete({
+		where: {
+			id: shortUrl
+		}
+	})
+}
