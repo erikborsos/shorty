@@ -17,6 +17,16 @@ export const createUrl = async (shortUrl: string, longUrl: string) => {
 	})
 }
 
+export const createUrlForUser = async (shortUrl: string, longUrl: string, userId: string) => {
+	return prisma.url.create({
+		data: {
+			id: shortUrl,
+			longUrl: longUrl,
+			userId: userId
+		}
+	})
+}
+
 export const getUrl = async (shortUrl: string) => {
 	return prisma.url.findUnique({
 		where: {

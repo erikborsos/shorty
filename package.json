@@ -58,7 +58,7 @@
 		"@tailwindcss/typography": "^0.5.10",
 		"@types/bcrypt": "^5.0.2",
 		"bcrypt": "^5.1.1",
-		"bits-ui": "^0.15.1",
+		"bits-ui": "^0.16.0",
 		"clsx": "^2.1.0",
 		"lucide-svelte": "^0.316.0",
 		"tailwind-merge": "^2.2.1",
