@@ -90,3 +90,11 @@ export const flyAndScale = (
 		easing: cubicOut
 	}
 }
+
+export const copyToClipboard = async (text: string) => {
+	return await navigator.clipboard.writeText(text)
+}
+
+export const getIsoDate = (date: Date) => {
+	return date.toISOString().split("T")[0]
+}

@@ -34,3 +34,19 @@ export const getUrl = async (shortUrl: string) => {
 		}
 	})
 }
+
+export const getUrls = async (userId: string) => {
+	return prisma.url.findMany({
+		where: {
+			userId: userId
+		}
+	})
+}
+
+export const deleteUrl = async (shortUrl: string) => {
+	return prisma.url.delete({
+		where: {
+			id: shortUrl
+		}
+	})
+}

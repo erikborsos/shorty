@@ -36,7 +36,7 @@
 		<div
 			in:fly={{ easing: cubicOut, y: 10, duration: 200, delay: 300 }}
 			out:fly={{ easing: cubicIn, y: -10, duration: 200, delay: 100 }}
-			class="col-start-1 row-start-2 flex w-full flex-col items-center justify-center gap-4"
+			class="col-start-1 row-start-2 flex w-full flex-col items-center justify-center gap-4 overflow-hidden"
 		>
 			<slot />
 		</div>

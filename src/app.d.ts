@@ -1,6 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 import { $Enums } from "@prisma/client"
+import type { PageData as UrlPageData } from "routes/urls/[urlId]/$types"
 
 declare global {
 	namespace App {
@@ -13,8 +14,11 @@ declare global {
 				role: $Enums.Role
 			}
 		}
+
 		// interface PageData {}
-		// interface PageState {}
+		interface PageState {
+			url: UrlPageData
+		}
 		// interface Platform {}
 	}
 }
